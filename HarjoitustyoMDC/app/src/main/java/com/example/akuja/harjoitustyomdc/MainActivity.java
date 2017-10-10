@@ -1,16 +1,17 @@
 package com.example.akuja.harjoitustyomdc;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
     EditText edittext;
-    TextView textview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,8 +24,14 @@ public class MainActivity extends AppCompatActivity {
     public void enter(View view){
         String username = edittext.getText().toString();
 
-        Intent intent = new Intent(MainActivity.this, ChatActivity.class);
-        intent.putExtra("user" ,username);
-        startActivity(intent);
+        if(username!=null){
+            Intent intent = new Intent(MainActivity.this, ChatActivity.class);
+            intent.putExtra("user" ,username);
+            startActivity(intent);
+        }
+        else{
+            Context context = getApplicationContext();
+            Toast.makeText(context, "Enter username", Toast.LENGTH_LONG).show();
+        }
     }
 }

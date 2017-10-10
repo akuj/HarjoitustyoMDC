@@ -103,14 +103,6 @@
       },
       "oauth_client": [
         {
-          "client_id": "994956645284-5omn2bm5c7fikf0gltegca20ab5163a3.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.akuja.harjoitustyomdc",
-            "certificate_hash": "c78aec1fccdfa08c53d9f7ccd014a97a22eb365c"
-          }
-        },
-        {
           "client_id": "994956645284-6f5tk83nti95k519qbclvvi8cn56i4fu.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

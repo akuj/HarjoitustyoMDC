@@ -1,11 +1,13 @@
 package com.example.akuja.harjoitustyomdc;
 
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -19,15 +21,22 @@ public class ChatActivity extends AppCompatActivity {
     String TAG = "hei";
     String useri;
     TextView txtview;
-
+    EditText edittext;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-
         txtview = (TextView) findViewById(R.id.txtview);
+        edittext = (EditText) findViewById(R.id.editText);
 
         Bundle bundle = getIntent().getExtras();
+
+        if(bundle.getString("user")!= null)
+        {
+            useri = bundle.getString("user");
+            Context context = getApplicationContext();
+            Toast.makeText(context, "Welcome " + useri, Toast.LENGTH_LONG).show();
+        }
 
         if(bundle.getString("user")!= null)
         {
@@ -38,24 +47,18 @@ public class ChatActivity extends AppCompatActivity {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         myRef = database.getReference(useri);
 
-
-    }
-
-    public void write(){
-        // Write a message to the database
-
-        myRef.setValue("Hello, World!");
-    }
-
-    public void read(){
-        // Read from the database
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                 String value = dataSnapshot.getValue(String.class);
+              /*  for (DataSnapshot data : dataSnapshot.getChildren()){
+                    Log.d(TAG,""+data.getValue().toString());
+                }*/
                 Log.d(TAG, "Value is: " + value);
+                txtview.append(value+"\n");
+                // Log.d(TAG,"kalle is "+kalle);
             }
 
             @Override
@@ -64,5 +67,16 @@ public class ChatActivity extends AppCompatActivity {
                 Log.w(TAG, "Failed to read value.", error.toException());
             }
         });
+
     }
+
+    public void write(View view){
+        // Write a message to the database
+
+        myRef.setValue(useri+": "+edittext.getText().toString());
+        edittext.setText("");
+    }
+
+
+
 }
