@@ -15,6 +15,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Map;
+
 public class ChatActivity extends AppCompatActivity {
 
     DatabaseReference myRef;
@@ -22,6 +24,8 @@ public class ChatActivity extends AppCompatActivity {
     String useri;
     TextView txtview;
     EditText edittext;
+    DatabaseReference postsRef;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,20 +49,22 @@ public class ChatActivity extends AppCompatActivity {
         }
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        myRef = database.getReference(useri);
+        myRef = database.getReference("posts");
 
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                String value = dataSnapshot.getValue(String.class);
-              /*  for (DataSnapshot data : dataSnapshot.getChildren()){
+                Map<String, Object> value = (Map<String, Object>) dataSnapshot.getValue();
+                txtview.append(value+"\n");
+                /*String value = dataSnapshot.getValue(String.class);
+                for (DataSnapshot data : dataSnapshot.getChildren()){
                     Log.d(TAG,""+data.getValue().toString());
-                }*/
+                }
                 Log.d(TAG, "Value is: " + value);
                 txtview.append(value+"\n");
-                // Log.d(TAG,"kalle is "+kalle);
+                // Log.d(TAG,"kalle is "+kalle);*/
             }
 
             @Override
@@ -71,12 +77,18 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     public void write(View view){
-        // Write a message to the database
-
-        myRef.setValue(useri+": "+edittext.getText().toString());
-        edittext.setText("");
+        DatabaseReference newPostRef = myRef.push();
+        newPostRef.setValue(new Post(useri, edittext.getText().toString()));
     }
 
+    public static class Post {
 
+        public String user;
+        public String message;
 
+        public Post(String user, String message) {
+            this.user = user;
+            this.message = message;
+        }
+    }
 }
