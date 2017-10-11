@@ -47,7 +47,7 @@ public class ChatActivity extends AppCompatActivity {
         if(bundle.getString("user")!= null)
         {
             useri = bundle.getString("user");
-            txtview.setText(useri);
+            //txtview.setText(useri);
         }
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -69,7 +69,7 @@ public class ChatActivity extends AppCompatActivity {
                 for (Object oo:asdf) {
                     String s= oo.toString();
                     Log.d(TAG, "onDataChange: s"+s);
-                   int startIndex = s.indexOf("message=");
+                    int startIndex = s.indexOf("message=");
                     startIndex = startIndex +8 ;
                     //Log.d(TAG, "onDataChange: startindex"+startIndex);
                     int endIndext = s.indexOf(", user=");
@@ -81,19 +81,27 @@ public class ChatActivity extends AppCompatActivity {
                     nameStartIndex = nameStartIndex + 5;
                     int nameEndIndex = s.indexOf("}");
                     String username = s.substring(nameStartIndex,nameEndIndex);
-                    //s.substring()
-                    txtview.append(""+username+": "+message+"\n");
+
 
                 }
 
-                //txtview.append(value+"\n");
-                /*String value = dataSnapshot.getValue(String.class);
                 for (DataSnapshot data : dataSnapshot.getChildren()){
-                    Log.d(TAG,""+data.getValue().toString());
+                    String s = data.getValue().toString();
+
+                    Log.d(TAG, "onDataChange: s"+s);
+                    int startIndex = s.indexOf("message=");
+                    startIndex = startIndex +8 ;
+                    int endIndext = s.indexOf(", user=");
+                    String message = s.substring(startIndex, endIndext);
+                    Log.d(TAG, "onDataChange: Message: "+message);
+
+                    int nameStartIndex = s.indexOf("user=");
+                    nameStartIndex = nameStartIndex + 5;
+                    int nameEndIndex = s.indexOf("}");
+                    String username = s.substring(nameStartIndex,nameEndIndex);
+
+                    txtview.append(username+": "+message+"\n");
                 }
-                Log.d(TAG, "Value is: " + value);
-                txtview.append(value+"\n");
-                // Log.d(TAG,"kalle is "+kalle);*/
             }
 
             @Override
