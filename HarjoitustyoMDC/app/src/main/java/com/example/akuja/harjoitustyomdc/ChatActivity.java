@@ -53,7 +53,7 @@ public class ChatActivity extends AppCompatActivity {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         myRef = database.getReference("posts");
 
-        myRef.addValueEventListener(new ValueEventListener() {
+        myRef.orderByKey().addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
@@ -69,11 +69,24 @@ public class ChatActivity extends AppCompatActivity {
                 for (Object oo:asdf) {
                     String s= oo.toString();
                     Log.d(TAG, "onDataChange: s"+s);
-                    //s.indexOf()
+                   int startIndex = s.indexOf("message=");
+                    startIndex = startIndex +8 ;
+                    //Log.d(TAG, "onDataChange: startindex"+startIndex);
+                    int endIndext = s.indexOf(", user=");
+                    //Log.d(TAG, "onDataChange: endIndex"+endIndext);
+                    String message = s.substring(startIndex, endIndext);
+                    Log.d(TAG, "onDataChange: Message: "+message);
+
+                    int nameStartIndex = s.indexOf("user=");
+                    nameStartIndex = nameStartIndex + 5;
+                    int nameEndIndex = s.indexOf("}");
+                    String username = s.substring(nameStartIndex,nameEndIndex);
+                    //s.substring()
+                    txtview.append(""+username+": "+message+"\n");
 
                 }
 
-                txtview.append(value+"\n");
+                //txtview.append(value+"\n");
                 /*String value = dataSnapshot.getValue(String.class);
                 for (DataSnapshot data : dataSnapshot.getChildren()){
                     Log.d(TAG,""+data.getValue().toString());
@@ -95,6 +108,7 @@ public class ChatActivity extends AppCompatActivity {
     public void write(View view){
         DatabaseReference newPostRef = myRef.push();
         newPostRef.setValue(new Post(useri, edittext.getText().toString()));
+        txtview.setText("");
     }
 
     public static class Post {
