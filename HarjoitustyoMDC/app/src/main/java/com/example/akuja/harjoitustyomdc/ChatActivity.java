@@ -24,7 +24,6 @@ public class ChatActivity extends AppCompatActivity {
     String useri;
     TextView txtview;
     EditText edittext;
-    DatabaseReference postsRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
