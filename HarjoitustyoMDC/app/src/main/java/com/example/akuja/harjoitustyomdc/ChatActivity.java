@@ -15,6 +15,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Map;
 
 public class ChatActivity extends AppCompatActivity {
@@ -31,7 +34,7 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
         txtview = (TextView) findViewById(R.id.txtview);
         edittext = (EditText) findViewById(R.id.editText);
-
+        Log.d(TAG, "onCreate: heijjsan");
         Bundle bundle = getIntent().getExtras();
 
         if(bundle.getString("user")!= null)
@@ -55,7 +58,21 @@ public class ChatActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                Map<String, Object> value = (Map<String, Object>) dataSnapshot.getValue();
+                Object o = dataSnapshot.getValue();
+
+                Log.d(TAG, "onDataChange: "+o);
+                Map<String, Object> value = (Map<String, Object>) o;
+                Log.d(TAG, "onDataChange: map "+value);
+                //Map<String, Object> value = (Map<String, Object>) dataSnapshot.getValue();
+                Collection asdf =value.values();
+                Log.d(TAG, "onDataChange: testing"+asdf);
+                for (Object oo:asdf) {
+                    String s= oo.toString();
+                    Log.d(TAG, "onDataChange: s"+s);
+                    //s.indexOf()
+
+                }
+
                 txtview.append(value+"\n");
                 /*String value = dataSnapshot.getValue(String.class);
                 for (DataSnapshot data : dataSnapshot.getChildren()){
@@ -84,6 +101,11 @@ public class ChatActivity extends AppCompatActivity {
 
         public String user;
         public String message;
+
+        public Post(){
+
+        }
+
 
         public Post(String user, String message) {
             this.user = user;
