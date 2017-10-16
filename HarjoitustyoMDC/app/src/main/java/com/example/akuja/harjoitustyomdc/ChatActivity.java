@@ -3,6 +3,8 @@ package com.example.akuja.harjoitustyomdc;
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -23,7 +25,6 @@ import java.util.Map;
 public class ChatActivity extends AppCompatActivity {
 
     DatabaseReference myRef;
-    String TAG = "hei";
     String useri;
     TextView txtview;
     EditText edittext;
@@ -34,8 +35,10 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
         txtview = (TextView) findViewById(R.id.txtview);
         edittext = (EditText) findViewById(R.id.editText);
-        Log.d(TAG, "onCreate: heijjsan");
+
         Bundle bundle = getIntent().getExtras();
+
+        txtview.setMovementMethod(new ScrollingMovementMethod());
 
         if(bundle.getString("user")!= null)
         {
@@ -47,7 +50,6 @@ public class ChatActivity extends AppCompatActivity {
         if(bundle.getString("user")!= null)
         {
             useri = bundle.getString("user");
-            //txtview.setText(useri);
         }
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -58,42 +60,15 @@ public class ChatActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                Object o = dataSnapshot.getValue();
 
-                Log.d(TAG, "onDataChange: "+o);
-                Map<String, Object> value = (Map<String, Object>) o;
-                Log.d(TAG, "onDataChange: map "+value);
-                //Map<String, Object> value = (Map<String, Object>) dataSnapshot.getValue();
-                Collection asdf =value.values();
-                Log.d(TAG, "onDataChange: testing"+asdf);
-                for (Object oo:asdf) {
-                    String s= oo.toString();
-                    Log.d(TAG, "onDataChange: s"+s);
-                    int startIndex = s.indexOf("message=");
-                    startIndex = startIndex +8 ;
-                    //Log.d(TAG, "onDataChange: startindex"+startIndex);
-                    int endIndext = s.indexOf(", user=");
-                    //Log.d(TAG, "onDataChange: endIndex"+endIndext);
-                    String message = s.substring(startIndex, endIndext);
-                    Log.d(TAG, "onDataChange: Message: "+message);
-
-                    int nameStartIndex = s.indexOf("user=");
-                    nameStartIndex = nameStartIndex + 5;
-                    int nameEndIndex = s.indexOf("}");
-                    String username = s.substring(nameStartIndex,nameEndIndex);
-
-
-                }
-
+                txtview.setText("");
                 for (DataSnapshot data : dataSnapshot.getChildren()){
                     String s = data.getValue().toString();
 
-                    Log.d(TAG, "onDataChange: s"+s);
                     int startIndex = s.indexOf("message=");
                     startIndex = startIndex +8 ;
                     int endIndext = s.indexOf(", user=");
                     String message = s.substring(startIndex, endIndext);
-                    Log.d(TAG, "onDataChange: Message: "+message);
 
                     int nameStartIndex = s.indexOf("user=");
                     nameStartIndex = nameStartIndex + 5;
@@ -107,7 +82,7 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException());
+                Log.w("onCancelled", "Failed to read value.", error.toException());
             }
         });
 
@@ -116,7 +91,7 @@ public class ChatActivity extends AppCompatActivity {
     public void write(View view){
         DatabaseReference newPostRef = myRef.push();
         newPostRef.setValue(new Post(useri, edittext.getText().toString()));
-        txtview.setText("");
+        edittext.setText("");
     }
 
     public static class Post {

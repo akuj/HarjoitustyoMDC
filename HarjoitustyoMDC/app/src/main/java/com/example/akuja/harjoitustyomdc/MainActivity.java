@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
 
     EditText edittext;
+    String username = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,16 +24,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void enter(View view){
-        String username = edittext.getText().toString();
+        username = edittext.getText().toString();
 
-        if(username!=null){
+        if(TextUtils.isEmpty(username.trim())){
+            Context context = getApplicationContext();
+            Toast.makeText(context, "Enter username", Toast.LENGTH_LONG).show();
+        }
+        else{
             Intent intent = new Intent(MainActivity.this, ChatActivity.class);
             intent.putExtra("user" ,username);
             startActivity(intent);
-        }
-        else{
-            Context context = getApplicationContext();
-            Toast.makeText(context, "Enter username", Toast.LENGTH_LONG).show();
         }
     }
 }
