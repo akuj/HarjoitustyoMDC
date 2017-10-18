@@ -54,7 +54,11 @@ public class ChatActivity extends AppCompatActivity {
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         myRef = database.getReference("posts");
+        read();
 
+    }
+
+    public void read(){
         myRef.orderByKey().addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -85,9 +89,7 @@ public class ChatActivity extends AppCompatActivity {
                 Log.w("onCancelled", "Failed to read value.", error.toException());
             }
         });
-
     }
-
     public void write(View view){
         DatabaseReference newPostRef = myRef.push();
         newPostRef.setValue(new Post(useri, edittext.getText().toString()));

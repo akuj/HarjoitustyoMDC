@@ -1,0 +1,7 @@
+As a user i want to:
+Be able to join the chat with any username.
+Be able to send messages to other people who's using the  app.
+Be able to receive messages from other users instantly.
+Be able to see the message history by scrolling.
+the keyboard not to block the user interface.
+See other users' usernames.
